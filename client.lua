@@ -105,7 +105,13 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         if currentWorkout.run then
             local diff = GetGameTimer() - currentWorkout.startTime
-            if diff >= currentWorkout.duration then stopWorkout() end
+            if diff >= currentWorkout.duration then
+                stopWorkout()
+                ESX.ShowNotification(string.format(
+                                         "You need to rest ~r~%d seconds ~w~before doing another exercise.",
+                                         Config.RestTime))
+
+            end
         end
     end
 end)
