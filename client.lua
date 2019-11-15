@@ -1,3 +1,5 @@
+local Keys = {['E'] = 38}
+
 ESX = nil
 
 -- Get ESX and PlayerData
@@ -47,15 +49,25 @@ Citizen.CreateThread(function()
                            Config.MarkerSize.z, Config.MarkerColour.r,
                            Config.MarkerColour.g, Config.MarkerColour.b, 255, 0,
                            0, 0, 1)
-            end
 
-            -- show action text
-            if distance < 1.0 then
-                SetTextComponentFormat("STRING")
-                AddTextComponentString(string.format(
-                                           "Press ~INPUT_CONTEXT~ to ~g~%s",
-                                           v.label))
-                DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+                -- show action text
+                if distance < 1.0 then
+                    SetTextComponentFormat("STRING")
+                    AddTextComponentString(
+                        string.format("Press ~INPUT_CONTEXT~ to ~g~%s", v.label))
+                    DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+
+                    -- start workout
+                    if IsControlJustPressed(0, Keys['E']) then
+                        local playerPed = GetPlayerPed(-1)
+                        TaskStartScenarioInPlace(playerPed,
+                                                 Config.WorkoutScenarios[v.workout],
+                                                 0, true)
+                        Citizen.Wait(v.time)
+                        ClearPedTasksImmediately(playerPed)
+                    end
+                end
+
             end
         end
     end
