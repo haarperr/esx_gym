@@ -3,6 +3,7 @@ local Keys = {['E'] = 38, ['Q'] = 44}
 ESX = nil
 
 local currentWorkout = {run = false, type = -1, startTime = -1, duration = -1}
+local lastWorkTime = -1
 
 -- Get ESX and PlayerData
 Citizen.CreateThread(function()
@@ -82,15 +83,20 @@ Citizen.CreateThread(function()
                     -- start workout
                     if currentWorkout.run == false and
                         IsControlJustPressed(0, Keys['E']) then
-                        startWorkout(v.workout, v.duration)
-                        TaskStartScenarioInPlace(GetPlayerPed(-1),
-                                                 Config.WorkoutScenarios[v.workout],
-                                                 0, true)
+                        if lastWorkTime ~= -1 then
+                            ESX.ShowNotification("You are resting...")
+                        else
+                            startWorkout(v.workout, v.duration)
+                            TaskStartScenarioInPlace(GetPlayerPed(-1),
+                                                     Config.WorkoutScenarios[v.workout],
+                                                     0, true)
+                        end
                     end
 
                     if currentWorkout.run == true and
                         IsControlJustPressed(0, Keys['Q']) then
                         stopWorkout()
+                        lastWorkTime = -1
                     end
                 end
 
@@ -99,7 +105,7 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Track workout progress
+-- Track workout / resting progress
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
@@ -107,11 +113,18 @@ Citizen.CreateThread(function()
             local diff = GetGameTimer() - currentWorkout.startTime
             if diff >= currentWorkout.duration then
                 stopWorkout()
+                lastWorkTime = GetGameTimer()
+
                 ESX.ShowNotification(string.format(
                                          "You need to rest ~r~%d seconds ~w~before doing another exercise.",
                                          Config.RestTime))
 
             end
+        end
+
+        if lastWorkTime ~= -1 then
+            local diff = GetGameTimer() - lastWorkTime
+            if diff >= Config.RestTime * 1000 then lastWorkTime = -1 end
         end
     end
 end)
