@@ -1,6 +1,8 @@
-local Keys = {['E'] = 38}
+local Keys = {['E'] = 38, ['Q'] = 44}
 
 ESX = nil
+
+local inWorkout = false
 
 -- Get ESX and PlayerData
 Citizen.CreateThread(function()
@@ -53,18 +55,27 @@ Citizen.CreateThread(function()
                 -- show action text
                 if distance < 1.0 then
                     SetTextComponentFormat("STRING")
-                    AddTextComponentString(
-                        string.format("Press ~INPUT_CONTEXT~ to ~g~%s", v.label))
+                    if inWorkout == false then
+                        AddTextComponentString(
+                            string.format("Press ~INPUT_CONTEXT~ to ~g~%s",
+                                          v.label))
+                    else
+                        AddTextComponentString(
+                            "Press ~INPUT_CONTEXT_SECONDARY~ to stop the exercise")
+                    end
                     DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 
                     -- start workout
-                    if IsControlJustPressed(0, Keys['E']) then
-                        local playerPed = GetPlayerPed(-1)
-                        TaskStartScenarioInPlace(playerPed,
+                    if inWorkout == false and IsControlJustPressed(0, Keys['E']) then
+                        inWorkout = true
+                        TaskStartScenarioInPlace(GetPlayerPed(-1),
                                                  Config.WorkoutScenarios[v.workout],
                                                  0, true)
-                        Citizen.Wait(v.time)
-                        ClearPedTasksImmediately(playerPed)
+                    end
+
+                    if inWorkout == true and IsControlJustPressed(0, Keys['Q']) then
+                        ClearPedTasksImmediately(GetPlayerPed(-1))
+                        inWorkout = false
                     end
                 end
 
