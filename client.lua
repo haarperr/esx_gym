@@ -2,7 +2,14 @@ local Keys = {['E'] = 38, ['Q'] = 44}
 
 ESX = nil
 
-local currentWorkout = {run = false, type = -1, startTime = -1, duration = -1}
+local currentWorkout = {
+    run = false,
+    type = -1,
+    startTime = -1,
+    duration = -1,
+    animDict = "",
+    animName = ""
+}
 local lastWorkTime = -1
 
 -- Get ESX and PlayerData
@@ -20,18 +27,28 @@ end)
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(player) ESX.PlayerData = player end)
 
-function startWorkout(type, duration)
+function startWorkout(type, duration, dict, name)
     currentWorkout = {
         run = true,
         type = type,
         startTime = GetGameTimer(),
-        duration = duration
+        duration = duration,
+        animDict = dict,
+        animName = name
     }
 end
 
 function stopWorkout()
-    currentWorkout = {run = false, type = -1, startTime = -1, duration = -1}
-    ClearPedTasksImmediately(GetPlayerPed(-1))
+    StopAnimTask(GetPlayerPed(-1), currentWorkout.animDict,
+                 currentWorkout.animName, 1.0)
+    currentWorkout = {
+        run = false,
+        type = -1,
+        startTime = -1,
+        duration = -1,
+        animDict = "",
+        animName = ""
+    }
 end
 
 -- Create blip
@@ -86,10 +103,24 @@ Citizen.CreateThread(function()
                         if lastWorkTime ~= -1 then
                             ESX.ShowNotification("You are resting...")
                         else
-                            startWorkout(v.workout, v.duration)
-                            TaskStartScenarioInPlace(GetPlayerPed(-1),
-                                                     Config.WorkoutScenarios[v.workout],
-                                                     0, true)
+                            startWorkout(v.workout, v.duration * 1000,
+                                         Config.WorkoutScenarios[v.workout][1],
+                                         Config.WorkoutScenarios[v.workout][2])
+                            local playerPed = GetPlayerPed(-1)
+                            SetEntityCoordsNoOffset(playerPed, v.x, v.y, v.z,
+                                                    false, false, false)
+                            SetEntityHeading(playerPed, v.h)
+                            RequestAnimDict(
+                                Config.WorkoutScenarios[v.workout][1])
+                            while not HasAnimDictLoaded(
+                                Config.WorkoutScenarios[v.workout][1]) do
+                                Citizen.Wait(10)
+                            end
+                            TaskPlayAnim(playerPed,
+                                         Config.WorkoutScenarios[v.workout][1],
+                                         Config.WorkoutScenarios[v.workout][2],
+                                         1.0, -1.0, v.duration * 1000, 1, 1,
+                                         true, true, true)
                         end
                     end
 
