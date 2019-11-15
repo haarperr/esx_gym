@@ -30,3 +30,34 @@ Citizen.CreateThread(function()
     AddTextComponentString(Config.Blip.Title)
     EndTextCommandSetBlipName(blip)
 end)
+
+-- Show workouts
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+
+        local coords = GetEntityCoords(GetPlayerPed(-1))
+        for k, v in pairs(Config.Workouts) do
+            local distance = GetDistanceBetweenCoords(coords, v.x, v.y, v.z,
+                                                      true)
+            -- show marker
+            if distance < Config.DrawDistance then
+                DrawMarker(Config.MarkerType, v.x, v.y, v.z, 0, 0, 0, 0, 0, 0,
+                           Config.MarkerSize.x, Config.MarkerSize.y,
+                           Config.MarkerSize.z, Config.MarkerColour.r,
+                           Config.MarkerColour.g, Config.MarkerColour.b, 255, 0,
+                           0, 0, 1)
+            end
+
+            -- show action text
+            if distance < 1.0 then
+                SetTextComponentFormat("STRING")
+                AddTextComponentString(string.format(
+                                           "Press ~INPUT_CONTEXT~ to ~g~%s",
+                                           v.label))
+                DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+            end
+        end
+    end
+end)
+
