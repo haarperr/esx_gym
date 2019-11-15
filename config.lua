@@ -26,76 +26,76 @@ Config.Workouts = {
         z = 4.11,
         label = "Z-Bar (Biceps)",
         workout = 2,
-        time = 5000
+        duration = 5000
     }, {
         x = -1197.77,
         y = -1571.33,
         z = 4.11,
         label = "Crunches",
         workout = 3,
-        time = 5000
+        duration = 5000
     }, {
         x = -1209.95,
         y = -1561.32,
         z = 4.11,
         label = "Z-Bar (Biceps)",
         workout = 2,
-        time = 5000
+        duration = 5000
     }, {
         x = -1204.25,
         y = -1556.83,
         z = 4.11,
         label = "Yoga",
         workout = 4,
-        time = 5000
+        duration = 5000
     }, {
         x = -1200.13,
         y = -1570.99,
         z = 4.11,
         label = "Pull-Ups",
         workout = 1,
-        time = 5000
+        duration = 5000
     }, {
         x = -1204.72,
         y = -1564.38,
         z = 4.11,
         label = "Pull-Ups",
         workout = 1,
-        time = 5000
+        duration = 5000
     }, {
         x = -1194.19,
         y = -1570.19,
         z = 4.11,
         label = "Push-Ups",
         workout = 5,
-        time = 5000
+        duration = 5000
     }, {
         x = -1197.10,
         y = -1567.59,
         z = 4.11,
         label = "Bench",
         workout = 6,
-        time = 5000
+        duration = 5000
     }, {
         x = -1200.63,
         y = -1575.83,
         z = 4.11,
         label = "Bench",
         workout = 6,
-        time = 5000
+        duration = 5000
     }, {
         x = -1206.49,
         y = -1561.59,
         z = 4.11,
         label = "Bench",
         workout = 6,
-        time = 5000
+        duration = 5000
     }, {
         x = -1201.44,
         y = -1562.77,
         z = 4.11,
         label = "Bench",
         workout = 6,
-        time = 5000
+        duration = 5000
     }
 }

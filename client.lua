@@ -2,7 +2,7 @@ local Keys = {['E'] = 38, ['Q'] = 44}
 
 ESX = nil
 
-local inWorkout = false
+local currentWorkout = {run = false, type = -1, startTime = -1, duration = -1}
 
 -- Get ESX and PlayerData
 Citizen.CreateThread(function()
@@ -18,6 +18,20 @@ end)
 
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(player) ESX.PlayerData = player end)
+
+function startWorkout(type, duration)
+    currentWorkout = {
+        run = true,
+        type = type,
+        startTime = GetGameTimer(),
+        duration = duration
+    }
+end
+
+function stopWorkout()
+    currentWorkout = {run = false, type = -1, startTime = -1, duration = -1}
+    ClearPedTasksImmediately(GetPlayerPed(-1))
+end
 
 -- Create blip
 Citizen.CreateThread(function()
@@ -55,7 +69,7 @@ Citizen.CreateThread(function()
                 -- show action text
                 if distance < 1.0 then
                     SetTextComponentFormat("STRING")
-                    if inWorkout == false then
+                    if currentWorkout.run == false then
                         AddTextComponentString(
                             string.format("Press ~INPUT_CONTEXT~ to ~g~%s",
                                           v.label))
@@ -66,16 +80,17 @@ Citizen.CreateThread(function()
                     DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 
                     -- start workout
-                    if inWorkout == false and IsControlJustPressed(0, Keys['E']) then
-                        inWorkout = true
+                    if currentWorkout.run == false and
+                        IsControlJustPressed(0, Keys['E']) then
+                        startWorkout(v.workout, v.duration)
                         TaskStartScenarioInPlace(GetPlayerPed(-1),
                                                  Config.WorkoutScenarios[v.workout],
                                                  0, true)
                     end
 
-                    if inWorkout == true and IsControlJustPressed(0, Keys['Q']) then
-                        ClearPedTasksImmediately(GetPlayerPed(-1))
-                        inWorkout = false
+                    if currentWorkout.run == true and
+                        IsControlJustPressed(0, Keys['Q']) then
+                        stopWorkout()
                     end
                 end
 
@@ -84,3 +99,13 @@ Citizen.CreateThread(function()
     end
 end)
 
+-- Track workout progress
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+        if currentWorkout.run then
+            local diff = GetGameTimer() - currentWorkout.startTime
+            if diff >= currentWorkout.duration then stopWorkout() end
+        end
+    end
+end)
