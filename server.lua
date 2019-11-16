@@ -7,7 +7,7 @@ function getMembership(identifier)
     local result = MySQL.Sync.fetchAll(
                        'SELECT id FROM gym_memberships WHERE identifier = @identifier',
                        {['@identifier'] = identifier})
-    if #result > 1 then return true end
+    if #result > 0 then return true end
     return false
 end
 
