@@ -11,6 +11,7 @@ local currentWorkout = {
     animName = ""
 }
 local lastWorkTime = -1
+local ownsMembership = false
 
 -- Get ESX and PlayerData
 Citizen.CreateThread(function()
@@ -22,6 +23,10 @@ Citizen.CreateThread(function()
     while ESX.GetPlayerData() == nil do Citizen.Wait(100) end
 
     ESX.PlayerData = ESX.GetPlayerData()
+    ESX.TriggerServerCallback('esx_gym:checkMembership', function(result)
+        ownsMembership = result
+        print(ownsMembership)
+    end)
 end)
 
 RegisterNetEvent('esx:playerLoaded')
@@ -159,6 +164,14 @@ Citizen.CreateThread(function()
                                                "days" or "day")))
                 DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 
+                if IsControlJustPressed(0, Keys['E']) then
+                    ESX.TriggerServerCallback('esx_gym:buyMembership', function(
+                        result)
+                        if result then
+                            ownsMembership = true
+                        end
+                    end)
+                end
             end
         end
 
