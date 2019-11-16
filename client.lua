@@ -105,7 +105,9 @@ Citizen.CreateThread(function()
                     -- start workout
                     if currentWorkout.run == false and
                         IsControlJustPressed(0, Keys['E']) then
-                        if lastWorkTime ~= -1 then
+                        if ownsMembership == false then
+                            ESX.ShowNotification("Please buy a gym membership")
+                        elseif lastWorkTime ~= -1 then
                             ESX.ShowNotification("You are resting...")
                         else
                             startWorkout(v.workout, v.duration * 1000,
