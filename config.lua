@@ -114,3 +114,9 @@ Config.Workouts = {
         duration = 30
     }
 }
+
+Config.Membership = {
+    Price = 100,
+    Expire = 1, -- days
+    Marker = {x = -1211.62, y = -1576.41, z = 4.61}
+}

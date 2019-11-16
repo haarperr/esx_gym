@@ -133,6 +133,35 @@ Citizen.CreateThread(function()
 
             end
         end
+
+        -- Membership
+        local distance = GetDistanceBetweenCoords(coords,
+                                                  Config.Membership.Marker.x,
+                                                  Config.Membership.Marker.y,
+                                                  Config.Membership.Marker.z,
+                                                  true)
+        if distance < Config.DrawDistance then
+            DrawMarker(Config.MarkerType, Config.Membership.Marker.x,
+                       Config.Membership.Marker.y, Config.Membership.Marker.z,
+                       0, 0, 0, 0, 0, 0, Config.MarkerSize.x,
+                       Config.MarkerSize.y, Config.MarkerSize.z,
+                       Config.MarkerColour.r, Config.MarkerColour.g,
+                       Config.MarkerColour.b, 255, 0, 0, 0, 1)
+
+            -- show action text
+            if distance < 1.0 then
+                SetTextComponentFormat("STRING")
+                AddTextComponentString(string.format(
+                                           "Press ~INPUT_CONTEXT~ to buy membership ($%d - %d %s)",
+                                           Config.Membership.Price,
+                                           Config.Membership.Expire,
+                                           (Config.Membership.Expire > 1 and
+                                               "days" or "day")))
+                DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+
+            end
+        end
+
     end
 end)
 
