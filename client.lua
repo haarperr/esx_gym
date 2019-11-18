@@ -21,16 +21,15 @@ Citizen.CreateThread(function()
     end
 
     while ESX.GetPlayerData() == nil do Citizen.Wait(100) end
-
     ESX.PlayerData = ESX.GetPlayerData()
-    ESX.TriggerServerCallback('esx_gym:checkMembership', function(result)
-        ownsMembership = result
-        print(ownsMembership)
-    end)
 end)
 
 RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(player) ESX.PlayerData = player end)
+AddEventHandler('esx:playerLoaded', function(player)
+    ESX.PlayerData = player
+    ESX.TriggerServerCallback('esx_gym:checkMembership',
+                              function(result) ownsMembership = result end)
+end)
 
 function startWorkout(type, duration, dict, name)
     currentWorkout = {
