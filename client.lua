@@ -22,6 +22,8 @@ Citizen.CreateThread(function()
 
     while ESX.GetPlayerData() == nil do Citizen.Wait(100) end
     ESX.PlayerData = ESX.GetPlayerData()
+    ESX.TriggerServerCallback('esx_gym:checkMembership',
+                              function(result) ownsMembership = result end)
 end)
 
 RegisterNetEvent('esx:playerLoaded')

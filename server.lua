@@ -14,6 +14,7 @@ end
 -- Check if membership already exists
 ESX.RegisterServerCallback('esx_gym:checkMembership', function(source, cb)
     local xPlayer = ESX.GetPlayerFromId(source)
+    if xPlayer == nil then return false end
     local membership = getMembership(xPlayer.getIdentifier())
     cb(membership)
 end)
