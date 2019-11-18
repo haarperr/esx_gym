@@ -40,3 +40,28 @@ ESX.RegisterServerCallback('esx_gym:buyMembership', function(source, cb)
             cb(true)
         end)
 end)
+
+-- Check membership expirations
+function CheckExpirations(d, h, m)
+    print("Check gym expirations")
+    MySQL.Async.fetchAll(
+        "SELECT id, identifier FROM gym_memberships WHERE expire <= FROM_UNIXTIME(@expire)",
+        {['@expire'] = os.time()}, function(result)
+            for i = 1, #result, 1 do
+                local xPlayer =
+                    ESX.GetPlayerFromIdentifier(result[i].identifier)
+
+                if xPlayer ~= nil then
+                    xPlayer.showNotification("Your gym membership ~r~expired.")
+                end
+
+                MySQL.Sync.execute(
+                    'DELETE FROM gym_memberships WHERE identifier = @identifier',
+                    {['@identifier'] = result[i].identifier})
+            end
+        end)
+end
+
+-- Register cron checks
+for i = 0, 23, 1 do TriggerEvent('cron:runAt', i, 0, CheckExpirations) end
+

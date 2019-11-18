@@ -14,8 +14,9 @@
 
 ### WIP
 
-- Automatic membership expiration using cron
 - Increase the player inventory max weight using the new ESX inventory system
+- Decrease the player inventory on death
+- i18n
 
 ## Download & Installation
 
