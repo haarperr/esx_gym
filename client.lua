@@ -158,7 +158,7 @@ Citizen.CreateThread(function()
             if distance < 1.0 then
                 SetTextComponentFormat("STRING")
                 AddTextComponentString(string.format(
-                                           "Press ~INPUT_CONTEXT~ to buy membership ($%d - %d %s)",
+                                           "Press ~INPUT_CONTEXT~ to buy membership (~g~$%d - %d %s~s~)",
                                            Config.Membership.Price,
                                            Config.Membership.Expire,
                                            (Config.Membership.Expire > 1 and
