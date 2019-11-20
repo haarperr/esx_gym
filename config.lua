@@ -3,7 +3,7 @@ Config.DrawDistance = 10.0
 Config.MarkerType = 21
 Config.MarkerSize = {x = 0.3, y = 0.3, z = 0.3}
 Config.MarkerColour = {r = 50, g = 50, b = 204}
-Config.RestTime = 60 -- Time between exercises in seconds
+Config.RestTime = 60 -- Time between workouts in seconds
 
 Config.Blip = {
     Title = "Gym",

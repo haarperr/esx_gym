@@ -99,7 +99,7 @@ Citizen.CreateThread(function()
                                           v.label))
                     else
                         AddTextComponentString(
-                            "Press ~INPUT_CONTEXT_SECONDARY~ to stop the exercise")
+                            "Press ~INPUT_CONTEXT_SECONDARY~ to stop workout")
                     end
                     DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 
@@ -160,7 +160,7 @@ Citizen.CreateThread(function()
             if distance < 1.0 then
                 SetTextComponentFormat("STRING")
                 AddTextComponentString(string.format(
-                                           "Press ~INPUT_CONTEXT~ to buy membership (~g~$%d - %d %s~s~)",
+                                           "~INPUT_CONTEXT~ Buy membership (~g~$%d - %d %s~s~)",
                                            Config.Membership.Price,
                                            Config.Membership.Expire,
                                            (Config.Membership.Expire > 1 and
@@ -192,7 +192,7 @@ Citizen.CreateThread(function()
                 lastWorkTime = GetGameTimer()
 
                 ESX.ShowNotification(string.format(
-                                         "You need to rest ~r~%d seconds ~w~before doing another exercise.",
+                                         "You need to rest ~r~%d seconds ~w~before doing another workout.",
                                          Config.RestTime))
 
             end
