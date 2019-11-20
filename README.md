@@ -1,5 +1,9 @@
 # esx_gym
 
+### Discord
+
+[Discord](https://discord.gg/yHytSHx)
+
 ### Requirements
 
 - es_extended
